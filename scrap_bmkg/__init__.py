@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 
 
 def data_extraction():
-
+#   print("\nData Mentah dari BMKG")
     content = requests.get("https://bmkg.go.id")
     soup = BeautifulSoup(content.text, "html.parser")
 
@@ -15,7 +15,6 @@ def data_extraction():
 
     i = 0
 
-    time_date = None
     waktu = None
     tanggal = None
     magnitudo = None
@@ -26,29 +25,28 @@ def data_extraction():
     dirasakan = None
 
     for res in result:
-        print(i, res)
         if i == 0:
             time_date = res.text.split(', ')
-            waktu = time_date[0]
-            tanggal = time_date[1]
-            print(time_date)
+            waktu = time_date[1]
+            tanggal = time_date[0]
+#            print(time_date)
         elif i == 1:
-            magnitude = res.text
-            print(magnitude)
+            magnitudo = res.text
+#            print(magnitudo)
         elif i == 2:
             kedalaman = res.text
-            print(kedalaman)
+#            print(kedalaman)
         elif i == 3:
             koordinat = res.text.split('- ')
             ls = koordinat[0]
             bt = koordinat[1]
-            print(koordinat)
+#            print(koordinat)
         elif i == 4:
             lokasi = res.text
-            print(lokasi)
+#            print(lokasi)
         elif i == 5:
             dirasakan = res.text
-            print(dirasakan)
+#            print(dirasakan)
         i = i + 1
 
     hasil = dict()
@@ -58,20 +56,16 @@ def data_extraction():
     hasil['koordinat'] = {'ls' : ls, 'bt' : bt }
     hasil['lokasi'] = lokasi
     hasil['dirasakan'] = dirasakan
-    print(hasil)
+    return hasil
 
 def data_show(result):
 
-    print("Gempa Terakhir berdasarkan BMKG")
-    print(f"Tanggal : {result['time_date']['waktu']}, {result['time_date']['tanggal']}")
+    print("\nGempa Terakhir berdasarkan BMKG")
+    print(f"Waktu : {result['time_date']['waktu']}")
+    print(f"Tanggal : {result['time_date']['tanggal']}")
     print(f"Magnitudo : {result['magnitudo']}")
     print(f"Kedalaman : {result['kedalaman']}")
     print(f"Koordinat : LS = {result['koordinat']['ls']}, BT = {result['koordinat']['bt']}")
     print(f"Lokasi : {result['lokasi']}")
     print(f"{result['dirasakan']}")
-    print("data_show")
-
-#data_extraction()
-#data_show(result)
-
 
